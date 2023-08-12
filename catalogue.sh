@@ -1,8 +1,6 @@
 script=$(realpath "$0")
-script_path=$(dir_name "$script")
+script_path=$(dirname "$script")
 source ${script_path}/common.sh
-
-
 
 func_print_head "Configuring NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$log_file
