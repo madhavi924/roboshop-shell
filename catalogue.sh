@@ -1,39 +1,44 @@
-echo -e "\e[36m>>>>> Configuring NodeJS Repos <<<<<\e[0m"
+script=$(realpath "$0")
+script_path=$(dir_name $"Script")
+source ${script_path}/common.sh
+
+func_print_head "Configuring NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
 
-echo -e "\e[36m>>>>> Install NodeJS <<<<<\e[0m"
+
+func_print_head "Install NodeJS"
 yum install nodejs -y
 
-echo -e "\e[36m>>>>> Add Application User <<<<<\e[0m"
+func_print_head "Add Application User"
 useradd roboshop
 
-echo -e "\e[36m>>>>> Create Application Directory <<<<<\e[0m"
+func_print_head "Create Application Directory"
 rm -rf /app
 mkdir /app
 
-echo -e "\e[36m>>>>> Download App Content <<<<<\e[0m"
+func_print_head "Download App Content "
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip
 cd /app
 
-echo -e "\e[36m>>>>> Unzip App Content <<<<<\e[0m"
+func_print_head "Unzip App Content"
 unzip /tmp/catalogue.zip
 
-echo -e "\e[36m>>>>> Add NodeJS Dependencies <<<<<\e[0m"
+func_print_head" Add NodeJS Dependencies"
 npm install
 
-echo -e "\e[31m>>>>> Copy Catalogue SystemD file <<<<<\e[0m"
+func_print_head "Copy Catalogue SystemD file"
 cp /home/centos/roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service
 
-echo -e "\e[31m>>>>> Start Catalogue Service <<<<<\e[0m"
+func_print_head "Start Catalogue Service"
 systemctl daemon-reload
 systemctl enable catalogue
 systemctl restart catalogue
 
-echo -e "\e[31m>>>>> Copy Mongodb repo <<<<<\e[0m"
+func_print_head "Copy Mongodb repo"
 cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
-echo -e "\e[31m>>>>> Install Mongodb Client <<<<<\e[0m"
+func_print_head "install MongoDb Client"
 yum install mongodb-org-shell -y
 
-echo -e "\e[36m>>>>> Load Schema <<<<<\e[0m"
+func_print_head "Load Schema"
 mongo --host mongodb-dev.madhavi91.online </app/schema/catalogue.js
