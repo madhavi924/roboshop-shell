@@ -5,7 +5,6 @@ source ${script_path}/common.sh
 func_print_head "Configuring NodeJS Repos "
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
 
-
 func_print_head "Install NodeJS"
 yum install nodejs -y
 
